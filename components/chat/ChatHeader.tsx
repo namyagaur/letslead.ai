@@ -10,18 +10,18 @@ export default function ChatHeader({ employee }: ChatHeaderProps) {
   return (
     <header className="sticky top-0 z-10 flex items-center justify-between border-b border-zinc-200 bg-white/90 px-6 py-4 backdrop-blur">
       <div className="flex items-center gap-4">
-        <div className="h-14 w-14 overflow-hidden rounded-full border border-zinc-200 bg-zinc-50">
+        <div className="h-12 w-12 overflow-hidden rounded-full border border-zinc-200 bg-white shadow-sm">
           <Image
             src={employee.avatar}
             alt={employee.name}
-            width={56}
-            height={56}
+            width={48}
+            height={48}
             className="h-full w-full rounded-full object-cover"
           />
         </div>
 
         <div>
-          <h1 className="text-base font-semibold text-zinc-900">
+          <h1 className="text-[15px] font-semibold tracking-tight text-zinc-900">
             {employee.name}
           </h1>
 
