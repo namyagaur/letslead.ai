@@ -14,8 +14,38 @@ export function useChat() {
     },
   ]);
 
+  const [isTyping, setIsTyping] = useState(false);
+
+  async function sendMessage(text: string) {
+    const userMessage: ChatMessage = {
+      id: crypto.randomUUID(),
+      role: "user",
+      content: text,
+      createdAt: new Date(),
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+
+    setIsTyping(true);
+
+    setTimeout(() => {
+      const assistantMessage: ChatMessage = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content:
+          "This is a fake AI response. Next we'll replace this with Gemini.",
+        createdAt: new Date(),
+      };
+
+      setMessages((prev) => [...prev, assistantMessage]);
+
+      setIsTyping(false);
+    }, 1200);
+  }
+
   return {
     messages,
-    setMessages,
+    sendMessage,
+    isTyping,
   };
 }
