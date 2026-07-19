@@ -15,6 +15,7 @@ export function useChat() {
   ]);
 
   const [isTyping, setIsTyping] = useState(false);
+  const [showQuickActions, setShowQuickActions] = useState(true);
 
   async function sendMessage(text: string) {
     const userMessage: ChatMessage = {
@@ -25,7 +26,7 @@ export function useChat() {
     };
 
     setMessages((prev) => [...prev, userMessage]);
-
+    setShowQuickActions(false);
     setIsTyping(true);
 
     setTimeout(() => {
@@ -44,8 +45,9 @@ export function useChat() {
   }
 
   return {
-    messages,
-    sendMessage,
-    isTyping,
-  };
+  messages,
+  sendMessage,
+  isTyping,
+  showQuickActions,
+};
 }
