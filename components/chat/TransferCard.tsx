@@ -14,9 +14,13 @@ export default function TransferCard({
   return (
     <div className="my-8 flex justify-center">
       <div className="w-full max-w-sm rounded-2xl border border-zinc-200 bg-white p-5 shadow-sm">
-        <p className="mb-5 text-center text-sm font-medium text-zinc-500">
-          Transferring your conversation
-        </p>
+        <p className="text-center text-lg font-semibold text-zinc-900">
+  Connecting you with {to.name}
+</p>
+
+<p className="mb-6 mt-1 text-center text-sm text-zinc-500">
+  {to.role}
+</p>
 
         <div className="flex items-center justify-center gap-4">
           <div className="flex flex-col items-center">

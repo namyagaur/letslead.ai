@@ -20,20 +20,22 @@ const {
   return (
     <main className="flex min-h-screen items-center justify-center bg-zinc-100 p-6">
 <div className="relative flex h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border bg-white shadow-xl">       
-  {transfer && (
+  {/* {transfer && (
   <TransferOverlay
     from={transfer.from}
     to={transfer.to}
   />
-)}
+)} */}
   <ChatHeader employee={currentEmployee} />
-        <ChatWindow
-  messages={messages}
-  isTyping={isTyping}
-  showQuickActions={showQuickActions}
-  onQuickAction={sendMessage}
-  employee={currentEmployee}
-/>
+        <div className="flex-1 overflow-hidden">
+  <ChatWindow
+    messages={messages}
+    isTyping={isTyping}
+    showQuickActions={showQuickActions}
+    onQuickAction={sendMessage}
+    employee={currentEmployee}
+  />
+</div>
 <ChatInput
   onSend={sendMessage}
   employee={currentEmployee}

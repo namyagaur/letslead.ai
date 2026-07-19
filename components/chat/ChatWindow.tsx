@@ -29,8 +29,9 @@ export default function ChatWindow({
   }, [messages, isTyping]);
 
   return (
-    <ScrollArea className="flex-1 px-6 py-6">
-      {messages.map((message) => {
+<ScrollArea className="h-full flex-1">
+  <div className="px-6 py-6">
+   {messages.map((message) => {
   if (
     message.role === "system" &&
     message.metadata?.type === "transfer"
@@ -61,6 +62,10 @@ export default function ChatWindow({
       {isTyping && <TypingIndicator employee={employee} />}
 
       <div ref={bottomRef} />
+
+    
+  </div>
+     
     </ScrollArea>
   );
 }
