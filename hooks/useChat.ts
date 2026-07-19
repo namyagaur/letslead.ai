@@ -4,6 +4,7 @@ import { useState } from "react";
 import { ChatMessage } from "@/types/chat";
 import { defaultEmployee, employees } from "@/lib/employees";
 import { routeConversation } from "@/lib/ai/router";
+import { chat } from "@/lib/ai/client";
 
 export function useChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -58,43 +59,48 @@ export function useChat() {
   }
 
   async function sendMessage(text: string) {
-    const userMessage: ChatMessage = {
+  const userMessage: ChatMessage = {
+    id: crypto.randomUUID(),
+    role: "user",
+    content: text,
+    createdAt: new Date(),
+  };
+
+  setMessages((prev) => [...prev, userMessage]);
+  setShowQuickActions(false);
+  setIsTyping(true);
+
+  // Decide who should handle the conversation
+  const nextEmployee = await routeConversation(text);
+
+  // Wait for typing animation
+  setTimeout(async () => {
+    const reply = await chat([
+      {
+        role: "user",
+        content: text,
+      },
+    ]);
+
+    const aiMessage: ChatMessage = {
       id: crypto.randomUUID(),
-      role: "user",
-      content: text,
+      role: "assistant",
+      content: reply,
       createdAt: new Date(),
     };
 
-    setMessages((prev) => [...prev, userMessage]);
-    setShowQuickActions(false);
-    setIsTyping(true);
+    setMessages((prev) => [...prev, aiMessage]);
+    setIsTyping(false);
 
-    // Ask the router which employee should handle this
-    const nextEmployee = await routeConversation(text);
+    if (nextEmployee.id === "sarah") {
+      return;
+    }
 
     setTimeout(() => {
-      const sarahMessage: ChatMessage = {
-        id: crypto.randomUUID(),
-        role: "assistant",
-        content:
-          nextEmployee.id === "sarah"
-            ? "I'd be happy to help you with that."
-            : `I'd love to help with that. I'm connecting you with ${nextEmployee.name}, our ${nextEmployee.role}.`,
-        createdAt: new Date(),
-      };
-
-      setMessages((prev) => [...prev, sarahMessage]);
-      setIsTyping(false);
-
-      if (nextEmployee.id === "sarah") {
-        return;
-      }
-
-      setTimeout(() => {
-        transferToEmployee(nextEmployee);
-      }, 1000);
-    }, 1200);
-  }
+      transferToEmployee(nextEmployee);
+    }, 1000);
+  }, 1200);
+}
 
   return {
     messages,
