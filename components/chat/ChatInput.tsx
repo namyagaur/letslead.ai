@@ -4,8 +4,19 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-export default function ChatInput() {
+interface ChatInputProps {
+  onSend: (message: string) => void;
+}
+
+export default function ChatInput({ onSend }: ChatInputProps) {
   const [message, setMessage] = useState("");
+
+  function handleSend() {
+    if (!message.trim()) return;
+
+    onSend(message);
+    setMessage("");
+  }
 
   return (
     <div className="border-t p-4">
@@ -14,9 +25,17 @@ export default function ChatInput() {
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           placeholder="Type your message..."
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleSend();
+            }
+          }}
         />
 
-        <Button>Send</Button>
+        <Button onClick={handleSend}>
+          Send
+        </Button>
       </div>
     </div>
   );
