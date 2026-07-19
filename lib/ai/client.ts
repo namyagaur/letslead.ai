@@ -1,9 +1,15 @@
-export async function POST(req: NextRequest) {
-  const { messages } = await req.json();
+import { AIMessage } from "./types";
 
-  const reply = await ai.chat(messages);
-
-  return NextResponse.json({
-    reply,
+export async function chat(messages: AIMessage[]) {
+  const response = await fetch("/api/ai/chat", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ messages }),
   });
+
+  const data = await response.json();
+
+  return data.reply as string;
 }
