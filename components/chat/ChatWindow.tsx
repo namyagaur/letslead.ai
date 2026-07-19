@@ -1,11 +1,13 @@
-"use client";
-
-import { useChat } from "@/hooks/useChat";
+import { ChatMessage as ChatMessageType } from "@/types/chat";
 import ChatMessage from "./ChatMessage";
 
-export default function ChatWindow() {
-  const { messages } = useChat();
+interface ChatWindowProps {
+  messages: ChatMessageType[];
+}
 
+export default function ChatWindow({
+  messages,
+}: ChatWindowProps) {
   return (
     <div className="flex-1 overflow-y-auto p-6">
       {messages.map((message) => (
