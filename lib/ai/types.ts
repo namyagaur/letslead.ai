@@ -1,0 +1,17 @@
+import { EmployeeId } from "@/lib/employees";
+
+export interface AIMessage {
+  role: "system" | "user" | "assistant";
+  content: string;
+}
+
+export interface RouteResult {
+  employee: EmployeeId;
+  reason: string;
+}
+
+export interface AIProvider {
+  route(messages: AIMessage[]): Promise<RouteResult>;
+
+  chat(messages: AIMessage[]): Promise<string>;
+}
