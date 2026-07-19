@@ -1,5 +1,5 @@
 "use client";
-
+import { ArrowUp } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,7 +44,7 @@ export default function ChatInput({
   size="icon"
   className="h-9 w-9 rounded-xl"
 >
-  →
+<ArrowUp size={18} strokeWidth={2.5} />
 </Button>
       </div>
     </div>

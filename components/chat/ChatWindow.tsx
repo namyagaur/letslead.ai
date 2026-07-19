@@ -5,6 +5,7 @@ import QuickActions from "./QuickActions";
 import { ChatMessage as Message } from "@/types/chat";
 import { employees } from "@/lib/employees";
 import { useEffect, useRef } from "react";
+import TransferCard from "./TransferCard";
 
 type ChatWindowProps = {
   messages: Message[];

@@ -19,12 +19,14 @@ export const employees = {
   },
 
   emily: {
-    id: "emily",
-    name: "Emily",
-    role: "Buyer Specialist",
-    avatar: "/avatars/emily.png",
-    status: "Online",
-  },
+  id: "emily",
+  name: "Emily",
+  role: "Buyer Specialist",
+  avatar: "/avatars/emily.png",
+  status: "Online",
+  welcomeMessage:
+    "Hi! I'm Emily, your Buyer Specialist. I'll help you find the right home based on your needs, budget, and preferred location. Let's get started!",
+},
 
   jessica: {
     id: "jessica",

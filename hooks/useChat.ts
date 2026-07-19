@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ChatMessage } from "@/types/chat";
-import { defaultEmployee } from "@/lib/employees";
+import { defaultEmployee, employees } from "@/lib/employees";
 export function useChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -17,6 +17,22 @@ export function useChat() {
   const [showQuickActions, setShowQuickActions] = useState(true);
   const [currentEmployee, setCurrentEmployee] =
   useState(defaultEmployee);
+  function transferToEmployee(
+  employee: (typeof employees)[keyof typeof employees]
+) {
+  setCurrentEmployee(employee);
+
+  setMessages([
+    {
+      id: crypto.randomUUID(),
+      role: "assistant",
+      content: employee.welcomeMessage,
+      createdAt: new Date(),
+    },
+  ]);
+
+  setShowQuickActions(true);
+}
   async function sendMessage(text: string) {
     const userMessage: ChatMessage = {
       id: crypto.randomUUID(),
@@ -30,25 +46,32 @@ export function useChat() {
     setIsTyping(true);
 
     setTimeout(() => {
-      const assistantMessage: ChatMessage = {
-        id: crypto.randomUUID(),
-        role: "assistant",
-        content:
-          "This is a fake AI response. Next we'll replace this with Gemini.",
-        createdAt: new Date(),
-      };
+  const sarahMessage: ChatMessage = {
+    id: crypto.randomUUID(),
+    role: "assistant",
+    content:
+      "I'd love to help with that. I'm connecting you with Emily, our Buyer Specialist.",
+    createdAt: new Date(),
+  };
 
-      setMessages((prev) => [...prev, assistantMessage]);
+  setMessages((prev) => [...prev, sarahMessage]);
 
-      setIsTyping(false);
-    }, 1200);
+  setIsTyping(false);
+
+  setTimeout(() => {
+    transferToEmployee(employees.emily);
+  }, 1200);
+}, 1200);
   }
 
   return {
   messages,
+  setMessages,
   sendMessage,
   isTyping,
+  setIsTyping,
   showQuickActions,
+  setShowQuickActions,
   currentEmployee,
   setCurrentEmployee,
 };
