@@ -1,10 +1,29 @@
 "use client";
 
+import {
+  Home,
+  Building2,
+  KeyRound,
+  Compass,
+} from "lucide-react";
+
 const actions = [
-  "🏡 Buy a Home",
-  "🏠 Sell a Home",
-  "🔑 Rent a Home",
-  "👀 Just Exploring",
+  {
+    label: "Buy a Home",
+    icon: Home,
+  },
+  {
+    label: "Sell a Home",
+    icon: Building2,
+  },
+  {
+    label: "Rent a Home",
+    icon: KeyRound,
+  },
+  {
+    label: "Just Exploring",
+    icon: Compass,
+  },
 ];
 
 interface QuickActionsProps {
@@ -15,16 +34,20 @@ export default function QuickActions({
   onSelect,
 }: QuickActionsProps) {
   return (
-    <div className="mt-4 flex flex-wrap gap-2">
-      {actions.map((action) => (
-        <button
-          key={action}
-          onClick={() => onSelect(action)}
-          className="rounded-full border border-zinc-300 bg-white px-4 py-2 text-sm font-medium transition-all hover:border-black hover:bg-zinc-100"
-        >
-          {action}
-        </button>
-      ))}
+    <div className="mt-5 flex flex-wrap gap-3">
+      {actions.map((action) => {
+        const Icon = action.icon;
+
+        return (
+          <button
+            key={action.label}
+            onClick={() => onSelect(action.label)}
+className="flex items-center gap-2 rounded-full border border-zinc-200 bg-white px-3.5 py-1.5 text-[15px] font-medium text-zinc-700 transition-all hover:border-zinc-900 hover:bg-zinc-50"          >
+            <Icon size={15} strokeWidth={2} />
+            {action.label}
+          </button>
+        );
+      })}
     </div>
   );
 }

@@ -14,6 +14,8 @@ export const employees = {
     role: "Lead Concierge",
     avatar: "/avatars/sarah.png",
     status: "Online",
+     welcomeMessage:
+    "Welcome! I'm Sarah, your Lead Concierge. I can help you buy, sell, rent, or answer questions about properties. What brings you here today?",
   },
 
   emily: {

@@ -1,53 +1,50 @@
-"use client";
-
-import { useEffect, useRef } from "react";
-import { ChatMessage as ChatMessageType } from "@/types/chat";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import ChatMessage from "./ChatMessage";
 import TypingIndicator from "./TypingIndicator";
 import QuickActions from "./QuickActions";
+import { ChatMessage as Message } from "@/types/chat";
+import { employees } from "@/lib/employees";
+import { useEffect, useRef } from "react";
 
-interface ChatWindowProps {
-  messages: ChatMessageType[];
+type ChatWindowProps = {
+  messages: Message[];
   isTyping: boolean;
   showQuickActions: boolean;
-  onQuickAction: (value: string) => void;
-}
+  onQuickAction: (text: string) => void;
+  employee: (typeof employees)[keyof typeof employees];
+};
+
 export default function ChatWindow({
   messages,
   isTyping,
   showQuickActions,
   onQuickAction,
+  employee,
 }: ChatWindowProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({
-      behavior: "smooth",
-    });
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
   return (
-    <div className="flex-1 overflow-y-auto p-6">
-      {messages.map((message, index) => (
-  <div key={message.id}>
-    <ChatMessage
-      role={message.role}
-      message={message.content}
-    />
-
-    {index === 0 &&
-      message.role === "assistant" &&
-      showQuickActions && (
-        <QuickActions
-          onSelect={onQuickAction}
+    <ScrollArea className="flex-1 px-6 py-6">
+      {messages.map((message) => (
+        <ChatMessage
+          key={message.id}
+          role={message.role}
+          message={message.content}
+          employee={employee}
         />
-      )}
-  </div>
-))}
+      ))}
 
-      {isTyping && <TypingIndicator />}
+      {showQuickActions && (
+        <QuickActions onSelect={onQuickAction} />
+      )}
+
+      {isTyping && <TypingIndicator employee={employee} />}
 
       <div ref={bottomRef} />
-    </div>
+    </ScrollArea>
   );
 }

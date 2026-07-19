@@ -8,8 +8,7 @@ export function useChat() {
     {
       id: crypto.randomUUID(),
       role: "assistant",
-      content:
-        "👋 Hi! I'm Sarah, your AI real estate assistant. How can I help you today?",
+      content: defaultEmployee.welcomeMessage,
       createdAt: new Date(),
     },
   ]);
