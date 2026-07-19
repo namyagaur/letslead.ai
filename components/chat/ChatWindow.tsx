@@ -30,14 +30,29 @@ export default function ChatWindow({
 
   return (
     <ScrollArea className="flex-1 px-6 py-6">
-      {messages.map((message) => (
-        <ChatMessage
-          key={message.id}
-          role={message.role}
-          message={message.content}
-          employee={employee}
-        />
-      ))}
+      {messages.map((message) => {
+  if (
+    message.role === "system" &&
+    message.metadata?.type === "transfer"
+  ) {
+    return (
+      <TransferCard
+        key={message.id}
+        from={employees[message.metadata.fromEmployeeId as keyof typeof employees]}
+        to={employees[message.metadata.toEmployeeId as keyof typeof employees]}
+      />
+    );
+  }
+
+  return (
+    <ChatMessage
+      key={message.id}
+      role={message.role as "user" | "assistant"}
+      message={message.content}
+      employee={employee}
+    />
+  );
+})}
 
       {showQuickActions && (
         <QuickActions onSelect={onQuickAction} />

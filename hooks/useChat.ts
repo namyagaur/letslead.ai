@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChatMessage } from "@/types/chat";
 import { defaultEmployee, employees } from "@/lib/employees";
+
 export function useChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -15,24 +16,48 @@ export function useChat() {
 
   const [isTyping, setIsTyping] = useState(false);
   const [showQuickActions, setShowQuickActions] = useState(true);
+
   const [currentEmployee, setCurrentEmployee] =
-  useState(defaultEmployee);
+    useState(defaultEmployee);
+
   function transferToEmployee(
-  employee: (typeof employees)[keyof typeof employees]
-) {
-  setCurrentEmployee(employee);
+    employee: (typeof employees)[keyof typeof employees]
+  ) {
+    // Show transfer card inside chat
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: crypto.randomUUID(),
+        role: "system",
+        content: "",
+        createdAt: new Date(),
+        metadata: {
+          type: "transfer",
+          fromEmployeeId: currentEmployee.id,
+          toEmployeeId: employee.id,
+        },
+      },
+    ]);
 
-  setMessages([
-    {
-      id: crypto.randomUUID(),
-      role: "assistant",
-      content: employee.welcomeMessage,
-      createdAt: new Date(),
-    },
-  ]);
+    // Wait for transfer animation
+    setTimeout(() => {
+      // Switch employee
+      setCurrentEmployee(employee);
 
-  setShowQuickActions(true);
-}
+      // Start a fresh conversation
+      setMessages([
+        {
+          id: crypto.randomUUID(),
+          role: "assistant",
+          content: employee.welcomeMessage,
+          createdAt: new Date(),
+        },
+      ]);
+
+      setShowQuickActions(true);
+    }, 1800);
+  }
+
   async function sendMessage(text: string) {
     const userMessage: ChatMessage = {
       id: crypto.randomUUID(),
@@ -46,33 +71,33 @@ export function useChat() {
     setIsTyping(true);
 
     setTimeout(() => {
-  const sarahMessage: ChatMessage = {
-    id: crypto.randomUUID(),
-    role: "assistant",
-    content:
-      "I'd love to help with that. I'm connecting you with Emily, our Buyer Specialist.",
-    createdAt: new Date(),
-  };
+      const sarahMessage: ChatMessage = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content:
+          "I'd love to help with that. I'm connecting you with Emily, our Buyer Specialist.",
+        createdAt: new Date(),
+      };
 
-  setMessages((prev) => [...prev, sarahMessage]);
+      setMessages((prev) => [...prev, sarahMessage]);
 
-  setIsTyping(false);
+      setIsTyping(false);
 
-  setTimeout(() => {
-    transferToEmployee(employees.emily);
-  }, 1200);
-}, 1200);
+      setTimeout(() => {
+        transferToEmployee(employees.emily);
+      }, 1000);
+    }, 1200);
   }
 
   return {
-  messages,
-  setMessages,
-  sendMessage,
-  isTyping,
-  setIsTyping,
-  showQuickActions,
-  setShowQuickActions,
-  currentEmployee,
-  setCurrentEmployee,
-};
+    messages,
+    setMessages,
+    sendMessage,
+    isTyping,
+    setIsTyping,
+    showQuickActions,
+    setShowQuickActions,
+    currentEmployee,
+    setCurrentEmployee,
+  };
 }

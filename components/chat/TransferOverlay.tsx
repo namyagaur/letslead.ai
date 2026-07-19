@@ -14,9 +14,13 @@ export default function TransferOverlay({
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center bg-white/90 backdrop-blur-sm">
       <div className="flex flex-col items-center">
-        <p className="mb-8 text-sm font-medium text-zinc-500">
-          Connecting you with a specialist...
-        </p>
+        <p className="mb-3 text-lg font-semibold text-zinc-900">
+  Connecting you...
+</p>
+
+<p className="mb-8 text-sm text-zinc-500">
+  We're transferring you to the best specialist for your request.
+</p>
 
         <div className="flex items-center gap-8">
           <div className="flex flex-col items-center">
@@ -33,10 +37,12 @@ export default function TransferOverlay({
             </p>
           </div>
 
-          <ArrowRight
-            className="animate-pulse text-zinc-400"
-            size={24}
-          />
+          <div className="flex items-center">
+  <ArrowRight
+    className="animate-pulse text-zinc-400"
+    size={22}
+  />
+</div>
 
           <div className="flex flex-col items-center">
             <Image
