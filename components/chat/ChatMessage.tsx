@@ -1,3 +1,5 @@
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+
 type ChatMessageProps = {
   role: "user" | "assistant";
   message: string;
@@ -10,16 +12,32 @@ export default function ChatMessage({
   const isUser = role === "user";
 
   return (
-    <div className={`mb-4 flex ${isUser ? "justify-end" : "justify-start"}`}>
+    <div
+      className={`mb-6 flex items-end gap-3 ${
+        isUser ? "justify-end" : "justify-start"
+      }`}
+    >
+      {!isUser && (
+        <Avatar className="h-9 w-9">
+          <AvatarFallback>⭐</AvatarFallback>
+        </Avatar>
+      )}
+
       <div
-        className={`max-w-[75%] rounded-2xl px-4 py-3 ${
+        className={`max-w-[70%] rounded-3xl px-5 py-3 text-[15px] leading-7 shadow-sm ${
           isUser
-            ? "bg-black text-white"
-            : "bg-muted text-foreground"
+            ? "bg-black text-white rounded-br-md"
+            : "bg-zinc-100 text-zinc-900 rounded-bl-md"
         }`}
       >
         {message}
       </div>
+
+      {isUser && (
+        <Avatar className="h-9 w-9">
+          <AvatarFallback>👤</AvatarFallback>
+        </Avatar>
+      )}
     </div>
   );
 }
