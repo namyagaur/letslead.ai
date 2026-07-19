@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { ChatMessage } from "@/types/chat";
-
+import { defaultEmployee } from "@/lib/employees";
 export function useChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
@@ -16,7 +16,8 @@ export function useChat() {
 
   const [isTyping, setIsTyping] = useState(false);
   const [showQuickActions, setShowQuickActions] = useState(true);
-
+  const [currentEmployee, setCurrentEmployee] =
+  useState(defaultEmployee);
   async function sendMessage(text: string) {
     const userMessage: ChatMessage = {
       id: crypto.randomUUID(),
@@ -49,5 +50,7 @@ export function useChat() {
   sendMessage,
   isTyping,
   showQuickActions,
+  currentEmployee,
+  setCurrentEmployee,
 };
 }

@@ -1,5 +1,5 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";import Image from "next/image";
+import { defaultEmployee } from "@/lib/employees";
 type ChatMessageProps = {
   role: "user" | "assistant";
   message: string;
@@ -18,10 +18,16 @@ export default function ChatMessage({
       }`}
     >
       {!isUser && (
-        <Avatar className="h-9 w-9">
-          <AvatarFallback>⭐</AvatarFallback>
-        </Avatar>
-      )}
+  <Avatar className="h-10 w-10 shrink-0 border border-zinc-200">
+    <Image
+      src={defaultEmployee.avatar}
+      alt={defaultEmployee.name}
+      width={40}
+      height={40}
+      className="h-full w-full rounded-full object-cover"
+    />
+  </Avatar>
+)}
 
       <div
         className={`max-w-[70%] rounded-3xl px-5 py-3 text-[15px] leading-7 shadow-sm ${
