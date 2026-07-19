@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChatMessage } from "@/types/chat";
 import { defaultEmployee, employees } from "@/lib/employees";
+import { routeConversation } from "@/lib/ai/router";
 
 export function useChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -23,7 +24,7 @@ export function useChat() {
   function transferToEmployee(
     employee: (typeof employees)[keyof typeof employees]
   ) {
-    // Show transfer card inside chat
+    // Show transfer card
     setMessages((prev) => [
       ...prev,
       {
@@ -41,10 +42,8 @@ export function useChat() {
 
     // Wait for transfer animation
     setTimeout(() => {
-      // Switch employee
       setCurrentEmployee(employee);
 
-      // Start a fresh conversation
       setMessages([
         {
           id: crypto.randomUUID(),
@@ -57,43 +56,7 @@ export function useChat() {
       setShowQuickActions(true);
     }, 1800);
   }
-  function getEmployeeForMessage(message: string) {
-  const text = message.toLowerCase();
 
-  if (
-    text.includes("buy") ||
-    text.includes("purchase") ||
-    text.includes("first home")
-  ) {
-    return employees.emily;
-  }
-
-  if (
-    text.includes("sell") ||
-    text.includes("selling") ||
-    text.includes("list")
-  ) {
-    return employees.jessica;
-  }
-
-  if (
-    text.includes("rent") ||
-    text.includes("rental") ||
-    text.includes("lease")
-  ) {
-    return employees.ava;
-  }
-
-  if (
-    text.includes("mortgage") ||
-    text.includes("loan") ||
-    text.includes("finance")
-  ) {
-    return employees.olivia;
-  }
-
-  return employees.sarah;
-}
   async function sendMessage(text: string) {
     const userMessage: ChatMessage = {
       id: crypto.randomUUID(),
@@ -106,32 +69,30 @@ export function useChat() {
     setShowQuickActions(false);
     setIsTyping(true);
 
-    setTimeout(() => {
-      const nextEmployee = getEmployeeForMessage(text);
+    // Ask the router which employee should handle this
+    const nextEmployee = await routeConversation(text);
 
-const sarahMessage: ChatMessage = {
-  id: crypto.randomUUID(),
-  role: "assistant",
-  content:
-    nextEmployee.id === "sarah"
-      ? "I'd be happy to help you with that."
-      : `I'd love to help with that. I'm connecting you with ${nextEmployee.name}, our ${nextEmployee.role}.`,
-  createdAt: new Date(),
-};
+    setTimeout(() => {
+      const sarahMessage: ChatMessage = {
+        id: crypto.randomUUID(),
+        role: "assistant",
+        content:
+          nextEmployee.id === "sarah"
+            ? "I'd be happy to help you with that."
+            : `I'd love to help with that. I'm connecting you with ${nextEmployee.name}, our ${nextEmployee.role}.`,
+        createdAt: new Date(),
+      };
 
       setMessages((prev) => [...prev, sarahMessage]);
-
       setIsTyping(false);
 
+      if (nextEmployee.id === "sarah") {
+        return;
+      }
+
       setTimeout(() => {
-  const nextEmployee = getEmployeeForMessage(text);
-
-  if (nextEmployee.id === "sarah") {
-    return;
-  }
-
-  transferToEmployee(nextEmployee);
-}, 1000);
+        transferToEmployee(nextEmployee);
+      }, 1000);
     }, 1200);
   }
 
