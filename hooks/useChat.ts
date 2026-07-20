@@ -17,13 +17,6 @@ const [messages, setMessages] = useState<ChatMessage[]>([
 ]);
 
 const [history, setHistory] = useState<AIMessage[]>([]);
-    {
-      id: crypto.randomUUID(),
-      role: "assistant",
-      content: defaultEmployee.welcomeMessage,
-      createdAt: new Date(),
-    },
-  ]);
 
   const [isTyping, setIsTyping] = useState(false);
   const [showQuickActions, setShowQuickActions] = useState(true);
@@ -51,19 +44,9 @@ const [pendingTransfer, setPendingTransfer] = useState<
 
     // Wait for transfer animation
     setTimeout(() => {
-      setCurrentEmployee(employee);
-
-      setMessages([
-        {
-          id: crypto.randomUUID(),
-          role: "assistant",
-          content: employee.welcomeMessage,
-          createdAt: new Date(),
-        },
-      ]);
-
-      setShowQuickActions(true);
-    }, 1800);
+  setCurrentEmployee(employee);
+  setShowQuickActions(true);
+}, 1800);
   }
   async function confirmTransfer() {
   if (!pendingTransfer) return;
@@ -89,6 +72,13 @@ function cancelTransfer() {
   const updatedMessages = [...messages, userMessage];
 
 setMessages(updatedMessages);
+setHistory((prev) => [
+  ...prev,
+  {
+    role: "user",
+    content: text,
+  },
+]);
   setShowQuickActions(false);
   setIsTyping(true);
 
@@ -97,17 +87,8 @@ const result = await route(text);
 const nextEmployee = employees[result.employee];
   // Wait for typing animation
   setTimeout(async () => {
-const history: AIMessage[] = updatedMessages
-  .filter(
-    (message): message is ChatMessage & {
-      role: "user" | "assistant";
-    } =>
-      message.role === "user" || message.role === "assistant"
-  )
-  .map((message) => ({
-    role: message.role,
-    content: message.content,
-  }));
+
+    
 
 if (nextEmployee.id !== currentEmployee.id) {
   setMessages((prev) => [
@@ -125,7 +106,15 @@ if (nextEmployee.id !== currentEmployee.id) {
   return;
 }
 
-const reply = await chat(currentEmployee.id, history);
+const currentHistory = [
+  ...history,
+  {
+    role: "user" as const,
+    content: text,
+  },
+];
+
+const reply = await chat(currentEmployee.id, currentHistory);
     const aiMessage: ChatMessage = {
       id: crypto.randomUUID(),
       role: "assistant",
