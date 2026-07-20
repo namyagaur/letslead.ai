@@ -5,6 +5,7 @@ import { ChatMessage } from "@/types/chat";
 import { defaultEmployee, employees } from "@/lib/employees";
 import { routeConversation } from "@/lib/ai/router";
 import { chat } from "@/lib/ai/client";
+import { AIMessage } from "@/lib/ai/types";
 
 export function useChat() {
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -19,8 +20,9 @@ export function useChat() {
   const [isTyping, setIsTyping] = useState(false);
   const [showQuickActions, setShowQuickActions] = useState(true);
 
-  const [currentEmployee, setCurrentEmployee] =
-    useState(defaultEmployee);
+  const [currentEmployee, setCurrentEmployee] = useState<
+  (typeof employees)[keyof typeof employees]
+>(defaultEmployee);
 
   function transferToEmployee(
     employee: (typeof employees)[keyof typeof employees]
@@ -79,8 +81,11 @@ setMessages(updatedMessages);
 
   // Wait for typing animation
   setTimeout(async () => {
-const history = updatedMessages  .filter(
-    (message) =>
+const history: AIMessage[] = updatedMessages
+  .filter(
+    (message): message is ChatMessage & {
+      role: "user" | "assistant";
+    } =>
       message.role === "user" || message.role === "assistant"
   )
   .map((message) => ({
@@ -88,8 +93,10 @@ const history = updatedMessages  .filter(
     content: message.content,
   }));
 
-const reply = await chat(history);
-
+const reply = await chat(
+  currentEmployee.id,
+  history
+);
     const aiMessage: ChatMessage = {
       id: crypto.randomUUID(),
       role: "assistant",
