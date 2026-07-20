@@ -7,7 +7,16 @@ import { chat, route } from "@/lib/ai/client";
 import { AIMessage } from "@/lib/ai/types";
 
 export function useChat() {
-  const [messages, setMessages] = useState<ChatMessage[]>([
+const [messages, setMessages] = useState<ChatMessage[]>([
+  {
+    id: crypto.randomUUID(),
+    role: "assistant",
+    content: defaultEmployee.welcomeMessage,
+    createdAt: new Date(),
+  },
+]);
+
+const [history, setHistory] = useState<AIMessage[]>([]);
     {
       id: crypto.randomUUID(),
       role: "assistant",
@@ -31,19 +40,14 @@ const [pendingTransfer, setPendingTransfer] = useState<
   ) {
     // Show transfer card
     setMessages((prev) => [
-      ...prev,
-      {
-        id: crypto.randomUUID(),
-        role: "system",
-        content: "",
-        createdAt: new Date(),
-        metadata: {
-          type: "transfer",
-          fromEmployeeId: currentEmployee.id,
-          toEmployeeId: employee.id,
-        },
-      },
-    ]);
+  ...prev,
+  {
+    id: crypto.randomUUID(),
+    role: "assistant",
+    content: employee.welcomeMessage,
+    createdAt: new Date(),
+  },
+]);
 
     // Wait for transfer animation
     setTimeout(() => {

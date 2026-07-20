@@ -16,6 +16,8 @@ const {
   currentEmployee,
   pendingTransfer,
   setPendingTransfer,
+  confirmTransfer,
+  cancelTransfer,
 } = useChat();
 
   return (
@@ -37,6 +39,8 @@ const {
   employee={currentEmployee}
   pendingTransfer={pendingTransfer}
   setPendingTransfer={setPendingTransfer}
+  confirmTransfer={confirmTransfer}
+  cancelTransfer={cancelTransfer}
 />
 </div>
 <ChatInput

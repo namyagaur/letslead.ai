@@ -14,11 +14,13 @@ type ChatWindowProps = {
   onQuickAction: (text: string) => void;
   employee: (typeof employees)[keyof typeof employees];
   pendingTransfer: (typeof employees)[keyof typeof employees] | null;
-setPendingTransfer: React.Dispatch<
+  setPendingTransfer: React.Dispatch<
   React.SetStateAction<
     (typeof employees)[keyof typeof employees] | null
-  >
->;
+  >>;
+  confirmTransfer: () => void;
+cancelTransfer: () => void;
+
 };
 
 export default function ChatWindow({
@@ -29,6 +31,8 @@ export default function ChatWindow({
   employee,
   pendingTransfer,
   setPendingTransfer,
+  confirmTransfer,
+  cancelTransfer,
 }: ChatWindowProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -65,12 +69,17 @@ export default function ChatWindow({
     {pendingTransfer &&
       message.id === messages[messages.length - 1].id && (
         <div className="mb-6 ml-12 flex gap-3">
-          <button className="rounded-full bg-black px-4 py-2 text-sm text-white">
+          <button
+  onClick={confirmTransfer}
+  className="rounded-full bg-black px-4 py-2 text-sm text-white"
+>
             Connect me
           </button>
 
-          <button className="rounded-full border px-4 py-2 text-sm">
-            Stay with Sarah
+<button
+  onClick={cancelTransfer}
+  className="rounded-full border px-4 py-2 text-sm"
+>            Stay with Sarah
           </button>
         </div>
       )}
