@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { ChatMessage } from "@/types/chat";
 import { defaultEmployee, employees } from "@/lib/employees";
-import { routeConversation } from "@/lib/ai/router";
-import { chat } from "@/lib/ai/client";
+import { chat, route } from "@/lib/ai/client";
 import { AIMessage } from "@/lib/ai/types";
 
 export function useChat() {
@@ -23,6 +22,9 @@ export function useChat() {
   const [currentEmployee, setCurrentEmployee] = useState<
   (typeof employees)[keyof typeof employees]
 >(defaultEmployee);
+const [pendingTransfer, setPendingTransfer] = useState<
+  (typeof employees)[keyof typeof employees] | null
+>(null);
 
   function transferToEmployee(
     employee: (typeof employees)[keyof typeof employees]
@@ -77,8 +79,8 @@ setMessages(updatedMessages);
   setIsTyping(true);
 
   // Decide who should handle the conversation
-  const nextEmployee = await routeConversation(text);
-
+const result = await route(text);
+const nextEmployee = employees[result.employee];
   // Wait for typing animation
   setTimeout(async () => {
 const history: AIMessage[] = updatedMessages
@@ -93,10 +95,23 @@ const history: AIMessage[] = updatedMessages
     content: message.content,
   }));
 
-const reply = await chat(
-  currentEmployee.id,
-  history
-);
+if (nextEmployee.id !== currentEmployee.id) {
+  setMessages((prev) => [
+    ...prev,
+    {
+      id: crypto.randomUUID(),
+      role: "assistant",
+      content: `I think ${nextEmployee.name}, our ${nextEmployee.role}, would be the best person to help you with this. Would you like me to connect you?`,
+      createdAt: new Date(),
+    },
+  ]);
+
+  setPendingTransfer(nextEmployee);
+  setIsTyping(false);
+  return;
+}
+
+const reply = await chat(currentEmployee.id, history);
     const aiMessage: ChatMessage = {
       id: crypto.randomUUID(),
       role: "assistant",
@@ -107,13 +122,7 @@ const reply = await chat(
     setMessages((prev) => [...prev, aiMessage]);
     setIsTyping(false);
 
-    if (nextEmployee.id === "sarah") {
-      return;
-    }
-
-    setTimeout(() => {
-      transferToEmployee(nextEmployee);
-    }, 1000);
+    
   }, 1200);
 }
 
