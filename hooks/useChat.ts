@@ -28,31 +28,61 @@ const [pendingTransfer, setPendingTransfer] = useState<
   (typeof employees)[keyof typeof employees] | null
 >(null);
 
-  function transferToEmployee(
-    employee: (typeof employees)[keyof typeof employees]
-  ) {
-    // Show transfer card
-    setMessages((prev) => [
-  ...prev,
-  {
-    id: crypto.randomUUID(),
-    role: "assistant",
-    content: employee.welcomeMessage,
-    createdAt: new Date(),
-  },
-]);
+  async function transferToEmployee(
+  employee: (typeof employees)[keyof typeof employees]
+) {
+  setMessages((prev) => [
+    ...prev,
+    {
+      id: crypto.randomUUID(),
+      role: "system",
+      content: "",
+      createdAt: new Date(),
+      metadata: {
+        type: "transfer",
+        fromEmployeeId: currentEmployee.id,
+        toEmployeeId: employee.id,
+      },
+    },
+  ]);
 
-    // Wait for transfer animation
-    setTimeout(() => {
+  await new Promise((resolve) => setTimeout(resolve, 1800));
+
   setCurrentEmployee(employee);
   setShowQuickActions(true);
-}, 1800);
-  }
+}
   async function confirmTransfer() {
   if (!pendingTransfer) return;
 
-  transferToEmployee(pendingTransfer);
+  const employee = pendingTransfer;
+
   setPendingTransfer(null);
+
+  await transferToEmployee(employee);
+
+  setIsTyping(true);
+
+  const reply = await chat(employee.id, history);
+
+  setHistory((prev) => [
+    ...prev,
+    {
+      role: "assistant",
+      content: reply,
+    },
+  ]);
+
+  setMessages((prev) => [
+    ...prev,
+    {
+      id: crypto.randomUUID(),
+      role: "assistant",
+      content: reply,
+      createdAt: new Date(),
+    },
+  ]);
+
+  setIsTyping(false);
 }
 
 function cancelTransfer() {
@@ -121,6 +151,13 @@ const reply = await chat(currentEmployee.id, currentHistory);
       content: reply,
       createdAt: new Date(),
     };
+    setHistory((prev) => [
+  ...prev,
+  {
+    role: "assistant",
+    content: reply,
+  },
+]);
 
     setMessages((prev) => [...prev, aiMessage]);
     setIsTyping(false);
