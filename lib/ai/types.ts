@@ -13,5 +13,8 @@ export interface RouteResult {
 export interface AIProvider {
   route(messages: AIMessage[]): Promise<RouteResult>;
 
-  chat(messages: AIMessage[]): Promise<string>;
+  chat(
+  employee: EmployeeId,
+  messages: AIMessage[]
+): Promise<string>;
 }

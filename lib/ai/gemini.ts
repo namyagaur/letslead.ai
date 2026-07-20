@@ -1,7 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import { AIProvider, AIMessage, RouteResult } from "./types";
 import { getPrompt } from "./prompts";
-
+import { EmployeeId } from "@/lib/employees";
 const client = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY!,
 });
@@ -10,7 +10,10 @@ export class GeminiProvider implements AIProvider {
     throw new Error("Not implemented");
   }
 
- async chat(messages: AIMessage[]): Promise<string> {
+ async chat(
+  employee: EmployeeId,
+  messages: AIMessage[]
+): Promise<string> {
   const conversation = messages
     .map((message) => `${message.role}: ${message.content}`)
     .join("\n");
@@ -18,7 +21,7 @@ export class GeminiProvider implements AIProvider {
   const response = await client.models.generateContent({
     model: "gemini-3.1-flash-lite",
     contents: `
-${getPrompt("sarah")}
+${getPrompt(employee)}
 Conversation:
 ${conversation}
 
