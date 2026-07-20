@@ -11,21 +11,20 @@ export class GeminiProvider implements AIProvider {
   }
 
  async chat(messages: AIMessage[]): Promise<string> {
+  const conversation = messages
+    .map((message) => `${message.role}: ${message.content}`)
+    .join("\n");
+
   const response = await client.models.generateContent({
-model: "gemini-3.1-flash-lite",   contents: [
-  {
-    role: "user",
-    parts: [
-      {
-        text: `
+    model: "gemini-3.1-flash-lite",
+    contents: `
 ${SARAH_SYSTEM_PROMPT}
 
-User: ${messages[messages.length - 1].content}
-        `,
-      },
-    ],
-  },
-],
+Conversation:
+${conversation}
+
+Continue the conversation as Sarah.
+`,
   });
 
   return response.text ?? "";
