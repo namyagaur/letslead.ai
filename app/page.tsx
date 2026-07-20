@@ -14,9 +14,10 @@ const {
   isTyping,
   showQuickActions,
   currentEmployee,
-  transfer,
+  pendingTransfer,
+  setPendingTransfer,
 } = useChat();
-  
+
   return (
     <main className="flex min-h-screen items-center justify-center bg-zinc-100 p-6">
 <div className="relative flex h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl border bg-white shadow-xl">       
@@ -29,12 +30,14 @@ const {
   <ChatHeader employee={currentEmployee} />
         <div className="flex-1 overflow-hidden">
   <ChatWindow
-    messages={messages}
-    isTyping={isTyping}
-    showQuickActions={showQuickActions}
-    onQuickAction={sendMessage}
-    employee={currentEmployee}
-  />
+  messages={messages}
+  isTyping={isTyping}
+  showQuickActions={showQuickActions}
+  onQuickAction={sendMessage}
+  employee={currentEmployee}
+  pendingTransfer={pendingTransfer}
+  setPendingTransfer={setPendingTransfer}
+/>
 </div>
 <ChatInput
   onSend={sendMessage}

@@ -1,5 +1,6 @@
 import { AIMessage } from "./types";
 import { EmployeeId } from "@/lib/employees";
+import { RouteResult } from "./types";
 
 export async function chat(
   employee: EmployeeId,
@@ -21,7 +22,9 @@ export async function chat(
   return data.reply as string;
 }
 
-export async function route(message: string) {
+export async function route(
+  message: string
+): Promise<RouteResult> {
   const response = await fetch("/api/ai/route", {
     method: "POST",
     headers: {
@@ -32,5 +35,5 @@ export async function route(message: string) {
     }),
   });
 
-  return response.json();
+return (await response.json()) as RouteResult;
 }

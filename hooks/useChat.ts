@@ -126,15 +126,17 @@ const reply = await chat(currentEmployee.id, history);
   }, 1200);
 }
 
-  return {
-    messages,
-    setMessages,
-    sendMessage,
-    isTyping,
-    setIsTyping,
-    showQuickActions,
-    setShowQuickActions,
-    currentEmployee,
-    setCurrentEmployee,
-  };
+ return {
+  messages,
+  setMessages,
+  sendMessage,
+  isTyping,
+  setIsTyping,
+  showQuickActions,
+  setShowQuickActions,
+  currentEmployee,
+  setCurrentEmployee,
+  pendingTransfer,
+  setPendingTransfer,
+};
 }

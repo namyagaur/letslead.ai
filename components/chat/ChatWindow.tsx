@@ -13,6 +13,12 @@ type ChatWindowProps = {
   showQuickActions: boolean;
   onQuickAction: (text: string) => void;
   employee: (typeof employees)[keyof typeof employees];
+  pendingTransfer: (typeof employees)[keyof typeof employees] | null;
+setPendingTransfer: React.Dispatch<
+  React.SetStateAction<
+    (typeof employees)[keyof typeof employees] | null
+  >
+>;
 };
 
 export default function ChatWindow({
