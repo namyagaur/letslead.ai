@@ -58,7 +58,7 @@ export function useChat() {
     }, 1800);
   }
 
-  async function sendMessage(text: string) {
+ async function sendMessage(text: string) {
   const userMessage: ChatMessage = {
     id: crypto.randomUUID(),
     role: "user",
@@ -66,7 +66,11 @@ export function useChat() {
     createdAt: new Date(),
   };
 
-  setMessages((prev) => [...prev, userMessage]);
+
+
+  const updatedMessages = [...messages, userMessage];
+
+setMessages(updatedMessages);
   setShowQuickActions(false);
   setIsTyping(true);
 
@@ -75,12 +79,16 @@ export function useChat() {
 
   // Wait for typing animation
   setTimeout(async () => {
-    const reply = await chat([
-      {
-        role: "user",
-        content: text,
-      },
-    ]);
+const history = updatedMessages  .filter(
+    (message) =>
+      message.role === "user" || message.role === "assistant"
+  )
+  .map((message) => ({
+    role: message.role,
+    content: message.content,
+  }));
+
+const reply = await chat(history);
 
     const aiMessage: ChatMessage = {
       id: crypto.randomUUID(),
