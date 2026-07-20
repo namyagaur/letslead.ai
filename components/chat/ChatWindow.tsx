@@ -27,6 +27,8 @@ export default function ChatWindow({
   showQuickActions,
   onQuickAction,
   employee,
+  pendingTransfer,
+  setPendingTransfer,
 }: ChatWindowProps) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -52,13 +54,28 @@ export default function ChatWindow({
   }
 
   return (
+  <>
     <ChatMessage
       key={message.id}
       role={message.role as "user" | "assistant"}
       message={message.content}
       employee={employee}
     />
-  );
+
+    {pendingTransfer &&
+      message.id === messages[messages.length - 1].id && (
+        <div className="mb-6 ml-12 flex gap-3">
+          <button className="rounded-full bg-black px-4 py-2 text-sm text-white">
+            Connect me
+          </button>
+
+          <button className="rounded-full border px-4 py-2 text-sm">
+            Stay with Sarah
+          </button>
+        </div>
+      )}
+  </>
+);
 })}
 
       {showQuickActions && (
