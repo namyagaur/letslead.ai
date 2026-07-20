@@ -61,6 +61,16 @@ const [pendingTransfer, setPendingTransfer] = useState<
       setShowQuickActions(true);
     }, 1800);
   }
+  async function confirmTransfer() {
+  if (!pendingTransfer) return;
+
+  transferToEmployee(pendingTransfer);
+  setPendingTransfer(null);
+}
+
+function cancelTransfer() {
+  setPendingTransfer(null);
+}
 
  async function sendMessage(text: string) {
   const userMessage: ChatMessage = {
@@ -136,7 +146,9 @@ const reply = await chat(currentEmployee.id, history);
   setShowQuickActions,
   currentEmployee,
   setCurrentEmployee,
-  pendingTransfer,
+   pendingTransfer,
   setPendingTransfer,
+  confirmTransfer,
+  cancelTransfer,
 };
 }
