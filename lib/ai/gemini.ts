@@ -1,6 +1,6 @@
 import { GoogleGenAI } from "@google/genai";
 import { AIProvider, AIMessage, RouteResult } from "./types";
-import { SARAH_SYSTEM_PROMPT } from "./prompts";
+import { getPrompt } from "./prompts";
 
 const client = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY!,
@@ -18,8 +18,7 @@ export class GeminiProvider implements AIProvider {
   const response = await client.models.generateContent({
     model: "gemini-3.1-flash-lite",
     contents: `
-${SARAH_SYSTEM_PROMPT}
-
+${getPrompt("sarah")}
 Conversation:
 ${conversation}
 
