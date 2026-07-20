@@ -25,8 +25,7 @@ ${getPrompt(employee)}
 Conversation:
 ${conversation}
 
-Continue the conversation as Sarah.
-`,
+Continue the conversation as ${employee}.`,
   });
 
   return response.text ?? "";
