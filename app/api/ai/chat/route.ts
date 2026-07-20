@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { ai } from "@/lib/ai";
 
 export async function GET() {
-  const reply = await ai.chat([
+  const reply = await ai.chat("sarah", [
     {
       role: "user",
       content: "Say hello in one sentence.",
@@ -15,10 +15,9 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const { messages } = await req.json();
+const { employee, messages } = await req.json();
 
-  const reply = await ai.chat(messages);
-
+const reply = await ai.chat(employee, messages);
   return NextResponse.json({
     reply,
   });
