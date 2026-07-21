@@ -43,7 +43,7 @@ Example:
   return JSON.parse(response.text ?? "{}");
 }
 
- async chat(
+async chat(
   employee: EmployeeId,
   messages: AIMessage[]
 ): Promise<string> {
@@ -51,14 +51,32 @@ Example:
     .map((message) => `${message.role}: ${message.content}`)
     .join("\n");
 
+  const handoff = `
+INTERNAL HANDOFF
+
+The customer has already been transferred to you by Sarah.
+
+Assume:
+- Sarah has welcomed the customer.
+- Sarah has identified you as the correct specialist.
+- Continue naturally.
+- Do NOT introduce yourself.
+- Do NOT restart the conversation.
+- Do NOT ask whether they want to buy, sell or rent.
+`;
+
   const response = await client.models.generateContent({
     model: "gemini-3.1-flash-lite",
     contents: `
 ${getPrompt(employee)}
+
+${employee !== "sarah" ? handoff : ""}
+
 Conversation:
 ${conversation}
 
-Continue the conversation as ${employee}.`,
+Continue naturally.
+`,
   });
 
   return response.text ?? "";
