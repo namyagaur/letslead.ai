@@ -49,8 +49,8 @@ const [pendingTransfer, setPendingTransfer] = useState<
 
   await new Promise((resolve) => setTimeout(resolve, 1800));
 
-  setCurrentEmployee(employee);
-  setShowQuickActions(true);
+ setCurrentEmployee(employee);
+setShowQuickActions(false);
 }
   async function confirmTransfer() {
   if (!pendingTransfer) return;
