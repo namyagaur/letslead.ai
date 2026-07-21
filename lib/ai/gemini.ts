@@ -2,10 +2,50 @@ import { GoogleGenAI } from "@google/genai";
 import { AIProvider, AIMessage, RouteResult, AIResponse } from "./types";
 import { getPrompt } from "./prompts";
 import { EmployeeId } from "@/lib/employees";
+import { Lead } from "@/types/lead";
+
 const client = new GoogleGenAI({
   apiKey: process.env.GEMINI_API_KEY!,
 });
 export class GeminiProvider implements AIProvider {
+  async extractLead(
+  messages: AIMessage[],
+  currentLead: Lead
+): Promise<Partial<Lead>> {
+  const conversation = messages
+    .map((m) => `${m.role}: ${m.content}`)
+    .join("\n");
+
+  const response = await client.models.generateContent({
+    model: "gemini-3.1-flash-lite",
+    contents: `
+You are an AI information extraction engine.
+
+Current Lead:
+${JSON.stringify(currentLead)}
+
+Conversation:
+${conversation}
+
+Extract ONLY NEW lead information.
+
+Return ONLY valid JSON.
+
+Example:
+
+{
+  "budget": "400k",
+  "city": "Noida"
+}
+
+If nothing new was learned return:
+
+{}
+`,
+  });
+
+  return JSON.parse(response.text ?? "{}");
+}
   async route(messages: AIMessage[]): Promise<RouteResult> {
   const conversation = messages
     .map((message) => `${message.role}: ${message.content}`)

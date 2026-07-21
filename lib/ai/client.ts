@@ -1,6 +1,7 @@
 import { AIMessage } from "./types";
 import { EmployeeId } from "@/lib/employees";
 import { RouteResult } from "./types";
+import { Lead } from "@/types/lead";
 
 export async function chat(
   employee: EmployeeId,
@@ -36,4 +37,23 @@ export async function route(
   });
 
 return (await response.json()) as RouteResult;
+}
+export async function extractLead(
+  messages: AIMessage[],
+  lead: Lead
+): Promise<Partial<Lead>> {
+  const response = await fetch("/api/ai/extract", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      messages,
+      lead,
+    }),
+  });
+
+  const data = await response.json();
+
+  return data.updates as Partial<Lead>;
 }
