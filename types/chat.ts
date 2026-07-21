@@ -1,3 +1,5 @@
+import { EmployeeId } from "@/lib/employees";
+
 export type Role = "user" | "assistant" | "system";
 
 export interface ChatMessage {
@@ -6,9 +8,11 @@ export interface ChatMessage {
   content: string;
   createdAt: Date;
 
+  employeeId?: EmployeeId;
+
   metadata?: {
     type?: "transfer";
-    fromEmployeeId?: string;
-    toEmployeeId?: string;
+    fromEmployeeId?: EmployeeId;
+    toEmployeeId?: EmployeeId;
   };
 }

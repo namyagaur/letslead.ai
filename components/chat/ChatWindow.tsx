@@ -60,11 +60,15 @@ export default function ChatWindow({
   return (
   <>
     <ChatMessage
-      key={message.id}
-      role={message.role as "user" | "assistant"}
-      message={message.content}
-      employee={employee}
-    />
+  key={message.id}
+  role={message.role as "user" | "assistant"}
+  message={message.content}
+  employee={
+    message.employeeId
+      ? employees[message.employeeId]
+      : employee
+  }
+/>
 
     {pendingTransfer &&
       message.id === messages[messages.length - 1].id && (

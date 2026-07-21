@@ -9,11 +9,12 @@ import { AIMessage } from "@/lib/ai/types";
 export function useChat() {
 const [messages, setMessages] = useState<ChatMessage[]>([
   {
-    id: crypto.randomUUID(),
-    role: "assistant",
-    content: defaultEmployee.welcomeMessage,
-    createdAt: new Date(),
-  },
+  id: crypto.randomUUID(),
+  role: "assistant",
+  content: defaultEmployee.welcomeMessage,
+  createdAt: new Date(),
+  employeeId: defaultEmployee.id,
+},
 ]);
 
 const [history, setHistory] = useState<AIMessage[]>([]);
@@ -73,14 +74,15 @@ const [pendingTransfer, setPendingTransfer] = useState<
   ]);
 
   setMessages((prev) => [
-    ...prev,
-    {
-      id: crypto.randomUUID(),
-      role: "assistant",
-      content: reply,
-      createdAt: new Date(),
-    },
-  ]);
+  ...prev,
+  {
+    id: crypto.randomUUID(),
+    role: "assistant",
+    content: reply,
+    createdAt: new Date(),
+    employeeId: employee.id,
+  },
+]);
 
   setIsTyping(false);
 }
@@ -150,6 +152,7 @@ const reply = await chat(currentEmployee.id, currentHistory);
       role: "assistant",
       content: reply,
       createdAt: new Date(),
+      employeeId: currentEmployee.id,
     };
     setHistory((prev) => [
   ...prev,
