@@ -1,5 +1,5 @@
 import { GoogleGenAI } from "@google/genai";
-import { AIProvider, AIMessage, RouteResult } from "./types";
+import { AIProvider, AIMessage, RouteResult, AIResponse } from "./types";
 import { getPrompt } from "./prompts";
 import { EmployeeId } from "@/lib/employees";
 const client = new GoogleGenAI({

@@ -1,5 +1,15 @@
 import { EmployeeId } from "@/lib/employees";
+import { Lead } from "@/types/lead";
 
+export interface AIResponse {
+  reply: string;
+
+  leadUpdates?: Partial<Lead>;
+
+  shouldTransfer?: boolean;
+
+  nextEmployee?: EmployeeId | null;
+}
 export interface AIMessage {
   role:  "user" | "assistant";
   content: string;
