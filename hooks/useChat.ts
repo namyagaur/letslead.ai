@@ -5,6 +5,7 @@ import { ChatMessage } from "@/types/chat";
 import { defaultEmployee, employees } from "@/lib/employees";
 import { chat, route } from "@/lib/ai/client";
 import { AIMessage } from "@/lib/ai/types";
+import { Lead } from "@/types/lead";
 
 export function useChat() {
 const [messages, setMessages] = useState<ChatMessage[]>([
@@ -28,7 +29,9 @@ const [history, setHistory] = useState<AIMessage[]>([]);
 const [pendingTransfer, setPendingTransfer] = useState<
   (typeof employees)[keyof typeof employees] | null
 >(null);
-
+const [lead, setLead] = useState<Lead>({
+  notes: [],
+});
   async function transferToEmployee(
   employee: (typeof employees)[keyof typeof employees]
 ) {
@@ -178,6 +181,8 @@ const reply = await chat(currentEmployee.id, currentHistory);
   messages,
   setMessages,
   sendMessage,
+  lead,
+  setLead,
   isTyping,
   setIsTyping,
   showQuickActions,
