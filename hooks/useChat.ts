@@ -130,6 +130,7 @@ if (nextEmployee.id !== currentEmployee.id) {
       role: "assistant",
       content: `I think ${nextEmployee.name}, our ${nextEmployee.role}, would be the best person to help you with this. Would you like me to connect you?`,
       createdAt: new Date(),
+      employeeId: currentEmployee.id,
     },
   ]);
 
