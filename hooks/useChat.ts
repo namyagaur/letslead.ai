@@ -114,9 +114,13 @@ setHistory((prev) => [
   setShowQuickActions(false);
   setIsTyping(true);
 
-  // Decide who should handle the conversation
-const result = await route(text);
-const nextEmployee = employees[result.employee];
+  let nextEmployee = currentEmployee;
+
+// Only Sarah decides transfers
+if (currentEmployee.id === "sarah") {
+  const result = await route(text);
+  nextEmployee = employees[result.employee];
+}
   // Wait for typing animation
   setTimeout(async () => {
 
